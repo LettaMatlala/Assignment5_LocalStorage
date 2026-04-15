@@ -18,8 +18,10 @@
                     Stroke="HotPink"
                     HeightRequest="120" 
                     WidthRequest="120"
-                    StrokeThickness="3"
+                    StrokeThickness="1"
                     StrokeShape="RoundRectangle 100">
+                
+                <!--Profile Icon-->
             <Image x:Name="ProfileImage" 
                    Source="profileicon.png"
                    HeightRequest="120" 
@@ -27,6 +29,7 @@
                    Aspect="AspectFill"/>
             </Border>
             
+            <!--Change Profile Button-->
             <Button Text="Change Picture" 
                     BackgroundColor="HotPink"
                     TextColor="White"
@@ -36,25 +39,43 @@
                     Clicked="OnChooseImageClicked"/>
 
             <!-- Input fields with borders -->
-            <Border Stroke="HotPink" StrokeThickness="1" StrokeShape="RoundRectangle 25"  Margin="0,20,0,0">
-                <Entry x:Name="NameEntry" Placeholder="Name"
+            <!--Name-->
+            <Border Stroke="HotPink"
+                    StrokeThickness="1" 
+                    StrokeShape="RoundRectangle 25" 
+                    Margin="0,20,0,0">
+                <Entry x:Name="NameEntry"
+                       Placeholder="Name"
                        Margin="10,0,0,0"/>
             </Border>
-
-            <Border Stroke="HotPink" StrokeThickness="1" StrokeShape="RoundRectangle 25">
-                <Entry x:Name="SurnameEntry" Placeholder="Surname" Margin="10,0,0,0"/>
+              
+            <!--Surname-->
+            <Border Stroke="HotPink" 
+                    StrokeThickness="1"
+                    StrokeShape="RoundRectangle 25">
+                <Entry x:Name="SurnameEntry"
+                       Placeholder="Surname" 
+                       Margin="10,0,0,0"/>
             </Border>
-
-            <Border Stroke="HotPink" StrokeThickness="1" StrokeShape="RoundRectangle 25">
-                <Entry x:Name="EmailEntry" Placeholder="Email" Margin="10,0,0,0"/>
+            
+            <!--Email Address-->
+            <Border Stroke="HotPink" 
+                    StrokeThickness="1" 
+                    StrokeShape="RoundRectangle 25">
+                <Entry x:Name="EmailEntry"
+                       Placeholder="Email Adress" 
+                       Margin="10,0,0,0"/>
             </Border>
-
-            <Border Stroke="HotPink" StrokeThickness="1" StrokeShape="RoundRectangle 25">
-                <Editor x:Name="BioEditor" Placeholder="Bio" HeightRequest="100" Margin="10,0,0,0"/>
+            
+            <!--Bio-->
+            <Border Stroke="HotPink"
+                    StrokeThickness="1" 
+                    StrokeShape="RoundRectangle 25">
+                <Editor x:Name="BioEditor"
+                        Placeholder="Bio" 
+                        HeightRequest="100" 
+                        Margin="10,0,0,0"/>
             </Border>
-
-
-
 
             <!-- Save button -->
             <Button Text="Save" 

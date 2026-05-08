@@ -6,16 +6,25 @@
     xmlns:local="clr-namespace:Assignment5.View"
     Title="Assignment5">
 
-    <FlyoutItem Title="Profile" Icon="profile.png">
-        <ShellContent
-            ContentTemplate="{DataTemplate local:MainPage}"
-            Route="MainPage" />
-    </FlyoutItem>
-
-    <FlyoutItem Title="Shopping Items" Icon="shoppingcart.png">
-        <ShellContent
+    <!-- Shell TabBar-->
+    <TabBar>
+        <Tab Title="Shop" Route="ShoppingItems" Icon="shoppingcart.png">
+            <ShellContent 
             ContentTemplate="{DataTemplate local:ShoppingItems}"
-            Route="ShoppingItems" />
-    </FlyoutItem>
+            Route="ShoppingItems"/>
+        </Tab>
+
+        <Tab Title="Cart" Route="Cart" Icon="shoppingcart.png">
+            <ShellContent 
+            ContentTemplate="{DataTemplate local:ShoppingCart}"
+            Route="ShoppingCart"/>
+        </Tab>
+
+        <Tab Title="Profile" Route="MainPage" Icon="profileicon.png">
+            <ShellContent
+            ContentTemplate="{DataTemplate local:MainPage}"
+            Route="MainPage"/>
+        </Tab>
+    </TabBar>
 
 </Shell>

@@ -61,12 +61,12 @@
 
                             <!-- Quantity badge -->
                             <Border Grid.Row="0" Grid.Column="1"
-                                    BackgroundColor="#e3f2fd"
+                                    BackgroundColor="Pink"
                                     StrokeThickness="0"
                                     StrokeShape="RoundRectangle 8"
                                     Padding="10,4">
                                 <Label Text="{Binding QuantityDisplay}"
-                                       TextColor="#1565c0"
+                                       TextColor="Magenta"
                                        FontAttributes="Bold"
                                        FontSize="13"/>
                             </Border>
@@ -84,17 +84,17 @@
                                    FontSize="12"
                                    TextColor="#888"/>
 
-                            <!-- Subtotal -->
+                            <!-- Subtotal Display-->
                             <Label Grid.Row="2" Grid.Column="1"
                                    Text="{Binding SubtotalDisplay}"
                                    FontSize="12"
-                                   TextColor="#2e7d32"
+                                   TextColor="DarkMagenta"
                                    FontAttributes="Bold"/>
 
-                            <!-- ✅ No CommandParameter — uses BindingContext instead -->
+                            <!-- Remove Button -->
                             <Button Grid.Row="3" Grid.ColumnSpan="2"
                                     Text="Remove"
-                                    BackgroundColor="#e53935"
+                                    BackgroundColor="HotPink"
                                     TextColor="White"
                                     CornerRadius="20"
                                     HeightRequest="40"
@@ -110,34 +110,34 @@
         <VerticalStackLayout Grid.Row="2" Padding="16,8" Spacing="10">
 
             <!-- ✅ Cart Total -->
-            <Border BackgroundColor="#e8f5e9"
+            <Border BackgroundColor="Transparent"
                     StrokeThickness="0"
                     StrokeShape="RoundRectangle 12"
                     Padding="16,10">
                 <Label Text="{Binding CartTotalDisplay}"
                        FontSize="18"
                        FontAttributes="Bold"
-                       TextColor="#2e7d32"
+                       TextColor="Magenta"
                        HorizontalOptions="Center"/>
             </Border>
 
             <Button Text="Clear Cart"
                     Clicked="OnClearCartClicked"
-                    BackgroundColor="#e53935"
+                    BackgroundColor="Pink"
                     TextColor="White"
                     CornerRadius="25"
                     HeightRequest="48"/>
 
             <Button Text="← Back to Shopping"
                     Clicked="OnBackToShoppingClicked"
-                    BackgroundColor="#1a73e8"
+                    BackgroundColor="deepPink"
                     TextColor="White"
                     CornerRadius="25"
                     HeightRequest="48"/>
 
             <Button Text="View Profile"
                     Clicked="OnViewProfileClicked"
-                    BackgroundColor="HotPink"
+                    BackgroundColor="DarkMagenta"
                     TextColor="White"
                     CornerRadius="25"
                     HeightRequest="48"/>

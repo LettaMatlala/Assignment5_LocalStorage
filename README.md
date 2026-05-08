@@ -18,3 +18,5 @@
   * User enters profile details.
   * Clicks Save - data is stored as JSON.
   * When app reopens - saved data is automatically loaded.
+ 
+  ## Continued from Assignment 5 to Assignment 6

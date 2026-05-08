@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Assignment5.View.ShoppingCart"
+             Title="ShoppingCart"
+             Shell.NavBarIsVisible="False">
+
+    <Grid RowDefinitions="Auto,*,Auto">
+
+        <!-- Header -->
+        <VerticalStackLayout Grid.Row="0" Padding="20,16,20,8" Spacing="4">
+            <Label Text="🛍️ My Cart"
+                   FontSize="24"
+                   FontAttributes="Bold"/>
+            <Label Text="Items you have added"
+                   FontSize="13"
+                   TextColor="Gray"/>
+        </VerticalStackLayout>
+
+        <!-- Loading indicator -->
+        <ActivityIndicator Grid.Row="1"
+                           IsRunning="{Binding IsBusy}"
+                           IsVisible="{Binding IsBusy}"
+                           VerticalOptions="Center"
+                           HorizontalOptions="Center"
+                           Color="Green"/>
+
+        <!-- Cart Items -->
+        <CollectionView Grid.Row="1"
+                        ItemsSource="{Binding CartItems}"
+                        Margin="12,0,12,0">
+
+            <CollectionView.EmptyView>
+                <VerticalStackLayout VerticalOptions="Center"
+                                     HorizontalOptions="Center"
+                                     Spacing="10"
+                                     Margin="0,60,0,0">
+                    <Label Text="🛒" FontSize="48" HorizontalOptions="Center"/>
+                    <Label Text="Your cart is empty"
+                           FontSize="16"
+                           TextColor="Gray"
+                           HorizontalOptions="Center"/>
+                </VerticalStackLayout>
+            </CollectionView.EmptyView>
+
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Border Stroke="#e0e0e0"
+                            StrokeThickness="1"
+                            StrokeShape="RoundRectangle 14"
+                            Padding="14"
+                            Margin="0,0,0,10">
+                        <Grid ColumnDefinitions="*,Auto"
+                              RowDefinitions="Auto,Auto,Auto,Auto">
+
+                            <!-- Item Name -->
+                            <Label Grid.Row="0" Grid.Column="0"
+                                   Text="{Binding Name}"
+                                   FontSize="17"
+                                   FontAttributes="Bold"/>
+
+                            <!-- Quantity badge -->
+                            <Border Grid.Row="0" Grid.Column="1"
+                                    BackgroundColor="#e3f2fd"
+                                    StrokeThickness="0"
+                                    StrokeShape="RoundRectangle 8"
+                                    Padding="10,4">
+                                <Label Text="{Binding QuantityDisplay}"
+                                       TextColor="#1565c0"
+                                       FontAttributes="Bold"
+                                       FontSize="13"/>
+                            </Border>
+
+                            <!-- Description -->
+                            <Label Grid.Row="1" Grid.ColumnSpan="2"
+                                   Text="{Binding Description}"
+                                   FontSize="13"
+                                   TextColor="Gray"
+                                   Margin="0,4,0,2"/>
+
+                            <!-- Price per item -->
+                            <Label Grid.Row="2" Grid.Column="0"
+                                   Text="{Binding PriceDisplay}"
+                                   FontSize="12"
+                                   TextColor="#888"/>
+
+                            <!-- Subtotal -->
+                            <Label Grid.Row="2" Grid.Column="1"
+                                   Text="{Binding SubtotalDisplay}"
+                                   FontSize="12"
+                                   TextColor="#2e7d32"
+                                   FontAttributes="Bold"/>
+
+                            <!-- ✅ No CommandParameter — uses BindingContext instead -->
+                            <Button Grid.Row="3" Grid.ColumnSpan="2"
+                                    Text="Remove"
+                                    BackgroundColor="#e53935"
+                                    TextColor="White"
+                                    CornerRadius="20"
+                                    HeightRequest="40"
+                                    Margin="0,8,0,0"
+                                    Clicked="OnRemoveClicked"/>
+                        </Grid>
+                    </Border>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+
+        <!-- Bottom: Total + Buttons -->
+        <VerticalStackLayout Grid.Row="2" Padding="16,8" Spacing="10">
+
+            <!-- ✅ Cart Total -->
+            <Border BackgroundColor="#e8f5e9"
+                    StrokeThickness="0"
+                    StrokeShape="RoundRectangle 12"
+                    Padding="16,10">
+                <Label Text="{Binding CartTotalDisplay}"
+                       FontSize="18"
+                       FontAttributes="Bold"
+                       TextColor="#2e7d32"
+                       HorizontalOptions="Center"/>
+            </Border>
+
+            <Button Text="Clear Cart"
+                    Clicked="OnClearCartClicked"
+                    BackgroundColor="#e53935"
+                    TextColor="White"
+                    CornerRadius="25"
+                    HeightRequest="48"/>
+
+            <Button Text="← Back to Shopping"
+                    Clicked="OnBackToShoppingClicked"
+                    BackgroundColor="#1a73e8"
+                    TextColor="White"
+                    CornerRadius="25"
+                    HeightRequest="48"/>
+
+            <Button Text="View Profile"
+                    Clicked="OnViewProfileClicked"
+                    BackgroundColor="HotPink"
+                    TextColor="White"
+                    CornerRadius="25"
+                    HeightRequest="48"/>
+        </VerticalStackLayout>
+
+    </Grid>
+</ContentPage>

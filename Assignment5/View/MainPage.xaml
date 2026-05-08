@@ -1,13 +1,14 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="Assignment5.MainPage"
+             xmlns:local="clr-namespace:Assignment5.View"
+             x:Class="Assignment5.View.MainPage"
              Shell.NavBarIsVisible="False">
 
     <!-- ScrollView allows the page to scroll if content is longer than screen -->
     <ScrollView>
         <VerticalStackLayout Padding="20" Spacing="15">
-            
+
             <!--Title-->
             <Label Text="Profile"
                    FontSize="20"
@@ -20,15 +21,15 @@
                     WidthRequest="120"
                     StrokeThickness="1"
                     StrokeShape="RoundRectangle 100">
-                
+
                 <!--Profile Icon-->
-            <Image x:Name="ProfileImage" 
+                <Image x:Name="ProfileImage" 
                    Source="profileicon.png"
                    HeightRequest="120" 
                    WidthRequest="120" 
                    Aspect="AspectFill"/>
             </Border>
-            
+
             <!--Change Profile Button-->
             <Button Text="Change Picture" 
                     BackgroundColor="HotPink"
@@ -48,7 +49,7 @@
                        Placeholder="Name"
                        Margin="10,0,0,0"/>
             </Border>
-              
+
             <!--Surname-->
             <Border Stroke="HotPink" 
                     StrokeThickness="1"
@@ -57,7 +58,7 @@
                        Placeholder="Surname" 
                        Margin="10,0,0,0"/>
             </Border>
-            
+
             <!--Email Address-->
             <Border Stroke="HotPink" 
                     StrokeThickness="1" 
@@ -66,7 +67,7 @@
                        Placeholder="Email Adress" 
                        Margin="10,0,0,0"/>
             </Border>
-            
+
             <!--Bio-->
             <Border Stroke="HotPink"
                     StrokeThickness="1" 

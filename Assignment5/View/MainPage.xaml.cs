@@ -1,92 +1,194 @@
-﻿using Assignment5.ViewModel; // Make sure Profile.cs is in ViewModel namespace
-using System.Text.Json; // For JSON serialization
+﻿
+using Assignment5.Models;
+using Assignment5.Services;
+using Microsoft.Maui.Storage;
+using Supabase.Gotrue.Mfa;
 
-namespace Assignment5
+namespace Assignment5.View
 {
     public partial class MainPage : ContentPage
     {
-        // Define the file path where profile.json will be stored
-        private readonly string filePath = Path.Combine(FileSystem.AppDataDirectory, "profile.json");
+        private readonly SupabaseService _supabase;
+        private Guid _userId;
+        private string _currentImageUrl = string.Empty;
+        private string _localImagePath = string.Empty;
 
         public MainPage()
         {
             InitializeComponent();
-        }
 
-        // Called when the page appears (loads saved profile data if available)
-        protected override void OnAppearing()
-        {
-            base.OnAppearing();
-            LoadProfile();
-        }
+            // Default image
+            ProfileImage.Source = "profileicon.png";
 
-        // Loads profile data from JSON file and populates UI fields
-        private void LoadProfile()
-        {
-            if (File.Exists(filePath))
+            _supabase = new SupabaseService();
+
+            // Persistent user ID
+            var stored = Preferences.Get("UserId", string.Empty);
+            if (!string.IsNullOrEmpty(stored))
+                _userId = Guid.Parse(stored);
+            else
             {
-                string json = File.ReadAllText(filePath);
-                var profile = JsonSerializer.Deserialize<Profile>(json);
+                _userId = Guid.NewGuid();
+                Preferences.Set("UserId", _userId.ToString());
+            }
 
-                // Populate UI with saved values
-                NameEntry.Text = profile.Name;
-                SurnameEntry.Text = profile.Surname;
-                EmailEntry.Text = profile.Email;
-                BioEditor.Text = profile.Bio;
-
-                // Load profile picture if path exists
-                if (!string.IsNullOrEmpty(profile.ProfileImagePath))
-                    ProfileImage.Source = ImageSource.FromFile(profile.ProfileImagePath);
+            // Restore local avatar if available
+            string savedLocal = Preferences.Get("LocalAvatarPath", string.Empty);
+            if (!string.IsNullOrEmpty(savedLocal) && File.Exists(savedLocal))
+            {
+                _localImagePath = savedLocal;
+                ProfileImage.Source = ImageSource.FromFile(savedLocal);
             }
         }
 
-        // Saves profile data to JSON file when Save button is clicked
-        private void OnSaveClicked(object sender, EventArgs e)
+        protected override async void OnAppearing()
         {
-            var profile = new Profile
-            {
-                Name = NameEntry.Text,
-                Surname = SurnameEntry.Text,
-                Email = EmailEntry.Text,
-                Bio = BioEditor.Text,
-                ProfileImagePath = (ProfileImage.Source as FileImageSource)?.File // Save image path
-            };
+            base.OnAppearing();
+            if (string.IsNullOrEmpty(_localImagePath))
+                ProfileImage.Source = "profileicon.png";
 
-            // Serialize profile object to JSON and write to file
-            string json = JsonSerializer.Serialize(profile);
-            File.WriteAllText(filePath, json);
-
-            DisplayAlert("Saved", "Profile saved successfully!", "OK");
+            await LoadProfileAsync();
         }
 
-        // Allows user to pick an image from device and set it as profile picture
+        private async Task LoadProfileAsync()
+        {
+            try
+            {
+                var profile = await _supabase.GetProfileByIdAsync(_userId);
+                RestoreImage();
+
+                if (profile != null)
+                {
+                    NameEntry.Text = profile.Name;
+                    SurnameEntry.Text = profile.Surname;
+                    EmailEntry.Text = profile.EmailAddress;
+                    BioEditor.Text = profile.Bio;
+
+                    if (!string.IsNullOrEmpty(profile.ProfileIconPath))
+                    {
+                        _currentImageUrl = profile.ProfileIconPath;
+                        if (!string.IsNullOrEmpty(_localImagePath) && File.Exists(_localImagePath))
+                            ProfileImage.Source = ImageSource.FromFile(_localImagePath);
+                        else
+                            ApplyRemoteImage(_currentImageUrl);
+                    }
+                }
+            }
+            catch
+            {
+                RestoreImage();
+            }
+        }
+
+        // Matches XAML: Clicked="OnSaveClicked"
+        private async void OnSaveClicked(object sender, EventArgs e)
+        {
+            try
+            {
+                var profile = new UserProfile
+                {
+                    Id = _userId,
+                    Name = NameEntry.Text?.Trim() ?? string.Empty,
+                    Surname = SurnameEntry.Text?.Trim() ?? string.Empty,
+                    EmailAddress = EmailEntry.Text?.Trim() ?? string.Empty,
+                    Bio = BioEditor.Text?.Trim() ?? string.Empty,
+                    ProfileIconPath = _currentImageUrl
+                };
+
+                await _supabase.SaveProfileAsync(profile);
+                RestoreImage();
+                await DisplayAlert("Success", "Profile saved!", "OK");
+            }
+            catch (Exception ex)
+            {
+                RestoreImage();
+                await DisplayAlert("Save Error", ex.Message, "OK");
+            }
+        }
+
+        // FIXED: Matches XAML: Clicked="OnChooseImageClicked"
         private async void OnChooseImageClicked(object sender, EventArgs e)
         {
             try
             {
-                var result = await FilePicker.Default.PickAsync(new PickOptions
+                var result = await FilePicker.PickAsync(new PickOptions
                 {
-                    PickerTitle = "Select Profile Picture",
+                    PickerTitle = "Select a profile picture",
                     FileTypes = FilePickerFileType.Images
                 });
 
-                if (result != null)
-                {
-                    // Copy selected image to app's local storage
-                    string destPath = Path.Combine(FileSystem.AppDataDirectory, result.FileName);
-                    using var stream = await result.OpenReadAsync();
-                    using var fileStream = File.Create(destPath);
-                    await stream.CopyToAsync(fileStream);
+                if (result == null) { RestoreImage(); return; }
 
-                    // Display chosen image
-                    ProfileImage.Source = ImageSource.FromFile(destPath);
+                string fileName = $"avatar_{_userId}{Path.GetExtension(result.FullPath)}";
+                string localPath = Path.Combine(FileSystem.AppDataDirectory, fileName);
+                File.Copy(result.FullPath, localPath, true);
+
+                _localImagePath = localPath;
+                Preferences.Set("LocalAvatarPath", localPath);
+
+                ProfileImage.Source = ImageSource.FromFile(localPath);
+
+                string? publicUrl = await _supabase.UploadProfilePictureAsync(_userId, localPath);
+                RestoreImage();
+
+                if (!string.IsNullOrEmpty(publicUrl))
+                {
+                    _currentImageUrl = publicUrl;
+                    var profile = new UserProfile
+                    {
+                        Id = _userId,
+                        Name = NameEntry.Text?.Trim() ?? string.Empty,
+                        Surname = SurnameEntry.Text?.Trim() ?? string.Empty,
+                        EmailAddress = EmailEntry.Text?.Trim() ?? string.Empty,
+                        Bio = BioEditor.Text?.Trim() ?? string.Empty,
+                        ProfileIconPath = _currentImageUrl
+                    };
+                    await _supabase.SaveProfileAsync(profile);
                 }
+
+                await DisplayAlert("Success", "Profile picture updated!", "OK");
             }
             catch (Exception ex)
             {
-                await DisplayAlert("Error", $"Image selection failed: {ex.Message}", "OK");
+                RestoreImage();
+                await DisplayAlert("Error", ex.Message, "OK");
             }
+        }
+
+        private void RestoreImage()
+        {
+            if (!string.IsNullOrEmpty(_localImagePath) && File.Exists(_localImagePath))
+            {
+                ProfileImage.Source = ImageSource.FromFile(_localImagePath);
+                return;
+            }
+
+            string saved = Preferences.Get("LocalAvatarPath", string.Empty);
+            if (!string.IsNullOrEmpty(saved) && File.Exists(saved))
+            {
+                _localImagePath = saved;
+                ProfileImage.Source = ImageSource.FromFile(saved);
+                return;
+            }
+
+            if (!string.IsNullOrEmpty(_currentImageUrl))
+            {
+                ApplyRemoteImage(_currentImageUrl);
+                return;
+            }
+
+            ProfileImage.Source = "profileicon.png";
+        }
+
+        private void ApplyRemoteImage(string url)
+        {
+            ProfileImage.Source = new UriImageSource
+            {
+                Uri = new Uri($"{url}?t={DateTimeOffset.UtcNow.ToUnixTimeSeconds()}"),
+                CachingEnabled = false
+            };
         }
     }
 }
+
 

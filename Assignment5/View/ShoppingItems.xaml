@@ -5,6 +5,7 @@
              Title="ShoppingItems"
              Shell.NavBarIsVisible="False">
 
+    <!--Top Bar-->
     <Grid RowDefinitions="Auto,Auto,*">
 
         <VerticalStackLayout Grid.Row="0" Padding="20,16,20,8" Spacing="4">
@@ -16,21 +17,23 @@
                    TextColor="Gray"/>
         </VerticalStackLayout>
 
+        <!--View Card button-->
         <Button Grid.Row="1"
                 Text="View Cart 🛍️"
                 Clicked="OnViewCartClicked"
-                BackgroundColor="#1a73e8"
+                BackgroundColor="Magenta"
                 TextColor="White"
                 CornerRadius="20"
                 HeightRequest="42"
                 Margin="16,0,16,10"/>
 
+        <!--Shopping Products-->
         <ActivityIndicator Grid.Row="2"
                            IsRunning="{Binding IsBusy}"
                            IsVisible="{Binding IsBusy}"
                            VerticalOptions="Center"
                            HorizontalOptions="Center"
-                           Color="Green"/>
+                           Color="LightPink"/>
 
         <CollectionView Grid.Row="2"
                         x:Name="ItemsCollection"
@@ -70,12 +73,14 @@
                             <Image Grid.Row="0" Grid.Column="0" Source="{Binding ImageLink}" HeightRequest="160" />
 
                             <Border Grid.Row="0" Grid.Column="1"
-                                    BackgroundColor="#e8f5e9"
+                                    BackgroundColor="LightPink"
                                     StrokeThickness="0"
+                                    VerticalOptions="Start"
                                     StrokeShape="RoundRectangle 8"
                                     Padding="8,4">
+                                
                                 <Label Text="{Binding Price, StringFormat='R{0:N2}'}"
-                                       TextColor="#2e7d32"
+                                       TextColor="DarkMagenta"
                                        FontAttributes="Bold"
                                        FontSize="14"/>
                             </Border>
@@ -91,10 +96,10 @@
                                    FontSize="12"
                                    TextColor="#888"/>
 
-                            <!-- ✅ No CommandParameter needed -->
+                            
                             <Button Grid.Row="3" Grid.ColumnSpan="2"
                                     Text="Add to Cart"
-                                    BackgroundColor="Green"
+                                    BackgroundColor="HotPink"
                                     TextColor="White"
                                     CornerRadius="20"
                                     HeightRequest="42"

@@ -30,7 +30,7 @@ namespace Assignment5.View
             }
 
             Console.WriteLine($"[RemoveClicked] Removing: {cartItem.Name}, id={cartItem.Id}");
-            await _vm.RemoveFromCartAsync(cartItem.Id);  // ✅ int
+            await _vm.RemoveFromCartAsync(cartItem.Id);  
         }
 
         private async void OnClearCartClicked(object sender, EventArgs e)

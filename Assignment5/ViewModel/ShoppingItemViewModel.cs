@@ -52,7 +52,7 @@ namespace Assignment5.ViewModel
             }
         }
 
-        // ✅ now takes int
+        
         public async Task<bool> AddToCartAsync(int itemId)
         {
             Console.WriteLine($"[AddToCartAsync] profileId={_profileId}, itemId={itemId}");

@@ -97,6 +97,7 @@ namespace Assignment5.View
             }
         }
 
+        // ✅ Navigate to ShoppingCart page
         private async void OnViewCartClicked(object sender, EventArgs e)
         {
             await Shell.Current.GoToAsync(nameof(ShoppingCart));

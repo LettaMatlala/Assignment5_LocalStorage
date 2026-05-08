@@ -157,7 +157,7 @@ namespace Assignment5.Services
             }
         }
 
-        // ✅ now takes int itemId
+        
         public async Task<bool> AddToCartAsync(Guid profileId, int itemId, int qty)
         {
             try

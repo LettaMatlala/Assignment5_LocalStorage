@@ -41,6 +41,7 @@ namespace Assignment5.View
             }
         }
 
+        // Load profile data when the page appears
         protected override async void OnAppearing()
         {
             base.OnAppearing();
@@ -50,6 +51,7 @@ namespace Assignment5.View
             await LoadProfileAsync();
         }
 
+        // Load profile data from Supabase
         private async Task LoadProfileAsync()
         {
             try
@@ -80,7 +82,7 @@ namespace Assignment5.View
             }
         }
 
-        // Matches XAML: Clicked="OnSaveClicked"
+        // Save button click handler
         private async void OnSaveClicked(object sender, EventArgs e)
         {
             try
@@ -106,7 +108,7 @@ namespace Assignment5.View
             }
         }
 
-        // FIXED: Matches XAML: Clicked="OnChooseImageClicked"
+        // Choose image button click handler
         private async void OnChooseImageClicked(object sender, EventArgs e)
         {
             try
@@ -155,6 +157,7 @@ namespace Assignment5.View
             }
         }
 
+        // Restore the profile image based on local or remote availability
         private void RestoreImage()
         {
             if (!string.IsNullOrEmpty(_localImagePath) && File.Exists(_localImagePath))
@@ -180,6 +183,7 @@ namespace Assignment5.View
             ProfileImage.Source = "profileicon.png";
         }
 
+        // Apply a remote image URL to the profile image, bypassing cache
         private void ApplyRemoteImage(string url)
         {
             ProfileImage.Source = new UriImageSource

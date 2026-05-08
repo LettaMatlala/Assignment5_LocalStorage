@@ -23,7 +23,7 @@ namespace Assignment5.Models
         [Column("bio")]
         public string Bio { get; set; } = string.Empty;
 
-        [Column("profile_icon_path")]              // ← confirmed from your screenshot
+        [Column("profile_icon_path")]              
         public string ProfileIconPath { get; set; } = string.Empty;
     }
 }

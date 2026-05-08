@@ -8,7 +8,7 @@ namespace Assignment5.Models
     public class ShoppingItem : BaseModel
     {
         [PrimaryKey("item_id", false)]
-        [JsonProperty("item_id")]  // ✅ matches Supabase column name
+        [JsonProperty("item_id")]  
         public int Id { get; set; }
 
         [Column("name")]

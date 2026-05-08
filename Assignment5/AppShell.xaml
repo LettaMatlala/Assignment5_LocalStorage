@@ -14,7 +14,7 @@
             Route="ShoppingItems"/>
         </Tab>
 
-        <Tab Title="Cart" Route="Cart" Icon="email.png">
+        <Tab Title="Cart" Route="Cart" Icon="shoppingcart.png">
             <ShellContent 
             ContentTemplate="{DataTemplate local:ShoppingCart}"
             Route="ShoppingCart"/>
